@@ -72,6 +72,8 @@ export default {
           if (index < str.length - 1) {
             setTimeout(f, this.typeInterval, index);
             return;
+          } else if (!this.replace.length) {
+            setTimeout(() => this.$emit('animationEnd'), this.typeInterval)
           }
           resolve();
         };
@@ -149,6 +151,8 @@ export default {
           if (index < replace.length - 1) {
             setTimeout(func, replaceInterval, ++index);
             return;
+          } else {
+            setTimeout(() => this.$emit('animationEnd'), replaceInterval)
           }
           resolve();
         };

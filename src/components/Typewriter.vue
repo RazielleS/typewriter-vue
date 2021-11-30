@@ -170,7 +170,7 @@ export default {
   }
 }
 
-.content *:last-child::after {
+.content > *:last-child::after {
   font-size: calc(1em + 2px);
   content: "|";
   animation: blink 0.75s step-end infinite;

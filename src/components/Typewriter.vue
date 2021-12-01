@@ -60,7 +60,11 @@ export default {
   },
   mounted() {
     if (this.enable) {
-      this.init();
+      if (this.$el.innerHTML.indexOf("content") === -1) {
+        setTimeout(() => this.init());
+      } else {
+        this.init();
+      }
     }
   },
   watch: {

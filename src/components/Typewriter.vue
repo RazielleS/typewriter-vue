@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ invisible: !show }" class="content">
+  <div :class="{ invisible: !show }" class="content" :style="style">
     <slot></slot>
   </div>
 </template>
@@ -55,6 +55,7 @@ export default {
   data() {
     return {
       show: false,
+      style: "",
     };
   },
   mounted() {
@@ -72,6 +73,7 @@ export default {
   methods: {
     async init() {
       this.show = true; // uncovers the content to prevent a flash of the full content
+      this.style = { height: this.$el.clientHeight + "px" };
       const { innerHTML, innerText } = this.$el;
       this.$el.innerHTML =
         innerHTML.trim() === innerText

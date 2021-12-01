@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div :class="{ invisible: !show }" class="content">
     <slot></slot>
   </div>
 </template>
@@ -52,6 +52,11 @@ export default {
       default: true,
     },
   },
+  data() {
+    return {
+      show: false,
+    };
+  },
   mounted() {
     if (this.enable) {
       this.init();
@@ -66,6 +71,7 @@ export default {
   },
   methods: {
     async init() {
+      this.show = true; // uncovers the content to prevent a flash of the full content
       const { innerHTML, innerText } = this.$el;
       this.$el.innerHTML =
         innerHTML.trim() === innerText
@@ -194,5 +200,8 @@ export default {
   font-size: calc(1em + 2px);
   content: "|";
   animation: blink 0.75s step-end infinite;
+}
+.invisible {
+  visibility: hidden;
 }
 </style>

@@ -44,9 +44,25 @@ export default {
       type: Number,
       default: 2000,
     },
+    /**
+     * Enable the typewriter (enabled by default)
+     */
+    enable: {
+      type: Boolean,
+      default: true,
+    },
   },
   mounted() {
-    this.init();
+    if (this.enable) {
+      this.init();
+    }
+  },
+  watch: {
+    enable(newVal, oldVal) {
+      if (newVal === true && oldVal === false) {
+        this.init();
+      }
+    },
   },
   methods: {
     async init() {
@@ -73,7 +89,7 @@ export default {
             setTimeout(f, this.typeInterval, index);
             return;
           } else if (!this.replace.length) {
-            setTimeout(() => this.$emit('animationEnd'), this.typeInterval)
+            setTimeout(() => this.$emit("animationEnd"), this.typeInterval);
           }
           resolve();
         };
@@ -152,7 +168,7 @@ export default {
             setTimeout(func, replaceInterval, ++index);
             return;
           } else {
-            setTimeout(() => this.$emit('animationEnd'), replaceInterval)
+            setTimeout(() => this.$emit("animationEnd"), replaceInterval);
           }
           resolve();
         };

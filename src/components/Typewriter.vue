@@ -91,6 +91,9 @@ export default {
       }
     },
     typewriter(str) {
+      // Remove multiple whitespaces
+      str = str.replace(/\s+/g, ' ').trim();
+
       return new Promise((resolve) => {
         this.$el.innerHTML = "";
         const f = (index) => {

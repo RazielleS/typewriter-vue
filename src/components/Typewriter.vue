@@ -56,16 +56,20 @@ export default {
     return {
       show: false,
       style: "",
+      timer: null,
     };
   },
   mounted() {
     if (this.enable) {
       if (this.$el.innerHTML.indexOf("content") === -1) {
-        setTimeout(() => this.init());
+        this.timer = setTimeout(() => this.init(), 50);
       } else {
         this.init();
       }
     }
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer);
   },
   watch: {
     enable(newVal, oldVal) {
@@ -85,14 +89,14 @@ export default {
           : innerHTML;
       await this.typewriter(this.$el.innerHTML);
       if (this.replace.length) {
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
           this.startReplacing();
         }, this.replaceInterval);
       }
     },
     typewriter(str) {
       // Remove multiple whitespaces
-      str = str.replace(/\s+/g, ' ').trim();
+      str = str.replace(/\s+/g, " ").trim();
 
       return new Promise((resolve) => {
         this.$el.innerHTML = "";
@@ -101,10 +105,13 @@ export default {
           index = current === "<" ? str.indexOf(">", index) + 1 : ++index;
           this.$el.innerHTML = str.substr(0, index);
           if (index < str.length - 1) {
-            setTimeout(f, this.typeInterval, index);
+            this.timer = setTimeout(f, this.typeInterval, index);
             return;
           } else if (!this.replace.length) {
-            setTimeout(() => this.$emit("animationEnd"), this.typeInterval);
+            this.timer = setTimeout(
+              () => this.$emit("animationEnd"),
+              this.typeInterval
+            );
           }
           resolve();
         };
@@ -118,7 +125,7 @@ export default {
           elementCopy.innerHTML = elementCopy.innerHTML.slice(0, index);
           index--;
           if (start <= index) {
-            setTimeout(f, this.typeInterval, index);
+            this.timer = setTimeout(f, this.typeInterval, index);
             return;
           }
           resolve();
@@ -136,7 +143,7 @@ export default {
             str[index]
           );
           if (index < str.length - 1) {
-            setTimeout(f, this.typeInterval, ++index, ++start);
+            this.timer = setTimeout(f, this.typeInterval, ++index, ++start);
             return;
           }
           resolve();
@@ -180,10 +187,13 @@ export default {
         const func = async (index) => {
           await this.replaceText(replace[index]);
           if (index < replace.length - 1) {
-            setTimeout(func, replaceInterval, ++index);
+            this.timer = setTimeout(func, replaceInterval, ++index);
             return;
           } else {
-            setTimeout(() => this.$emit("animationEnd"), replaceInterval);
+            this.timer = setTimeout(
+              () => this.$emit("animationEnd"),
+              replaceInterval
+            );
           }
           resolve();
         };
